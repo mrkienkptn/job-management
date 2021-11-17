@@ -1,0 +1,63 @@
+{
+  "name": "drm-blog",
+  "version": "1.0.20",
+  "description": "DRM Service Blog",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/backend_intern/practice/drm-service-blog.git"
+  },
+  "author": "HungNV",
+  "license": "MIT",
+  "scripts": {
+    "start": "apidoc -i ./src/ -o docs/ && node .",
+    "test": "mocha src/**/*.spec.js",
+    "lint": "standard",
+    "lint-fix": "standard --fix",
+    "doc-md": "apidoc -i src -o apidoc-out && apidoc-markdown -p apidoc-out -o docs.md && rm -rf apidoc-out",
+    "doc-web": "apidoc -i ./src/ -o docs/"
+  },
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "compression": "^1.7.4",
+    "connect-timeout": "^1.9.0",
+    "cors": "^2.8.4",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.14.0",
+    "express-validation": "^3.0.5",
+    "helmet": "^3.4.0",
+    "http-status": "^0.2.5",
+    "joi": "^17.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "method-override": "^3.0.0",
+    "mocha": "^9.0.1",
+    "moment-timezone": "^0.5.31",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.13.2",
+    "morgan": "^1.10.0",
+    "path-to-regexp": "^6.2.0",
+    "standard": "^16.0.3",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "apidoc": "^0.25.0",
+    "apidoc-markdown": "^5.1.8",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "shelljs": "^0.8.3",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/backend_intern/practice/drm-service-blog/-/issues"
+  },
+  "homepage": "https://gitlab.com/backend_intern/practice/drm-service-blog.git"
+}
