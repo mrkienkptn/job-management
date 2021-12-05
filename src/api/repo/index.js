@@ -1,5 +1,8 @@
-const logRepo = require('./log.repo')
-
+const userRepo = require('./user.repo')
+const groupRepo = require('./group.repo')
+const processRepo = require('./process.repo')
 module.exports = {
-  logRepo
+  userRepo,
+  groupRepo,
+  processRepo
 }

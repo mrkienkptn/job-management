@@ -1,5 +1,8 @@
-const logController = require('./log.controller')
-
+const userController = require('./user.controller')
+const groupController = require('./group.controller')
+const processController = require('./process.controller')
 module.exports = {
-  logController
+  userController,
+  groupController,
+  processController
 }

@@ -7,7 +7,7 @@ require('dotenv-safe').config({
 
 module.exports = {
   env: process.env.NODE_ENV || 'test',
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 8000,
   mongo: {
     uri:
       process.env.NODE_ENV === 'test'
@@ -24,5 +24,10 @@ module.exports = {
     secretKey:
       process.env.AUTH_SECRET_KEY || 'bA2xcjpf8y5aSUFsNB2qN5yymUBSs6es3q',
     expireCode: process.env.AUTH_EXPIRE_CODE || 419
+  },
+  googleAuth: {
+    clientId: '183648768881-o6r8dvf9tqkcs5s1peubbbif90cmhod0.apps.googleusercontent.com',
+    secret: 'TJ-WhmCJ9f_5iSZY2LIHh_JD',
+    redirectUri: 'http://localhost:8000/'
   }
 }

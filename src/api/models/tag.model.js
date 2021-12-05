@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 /**
- * Log Schema
+ * Tag Schema
  * @private
  */
-const logSchema = new mongoose.Schema(
+const tagSchema = new mongoose.Schema(
   {
     id: {
-      type: Number,
+      type: String,
       index: true,
       unique: true,
       required: true
@@ -17,18 +17,13 @@ const logSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
-    description: {
-      type: String
-    }
-  },
-  {
-    timestamps: true
+    color: String
   }
 )
 
 /**
  * typedef log
  */
-const Log = mongoose.model('log', logSchema)
+const Tag = mongoose.model('tag', tagSchema)
 
-module.exports = Log
+module.exports = Tag

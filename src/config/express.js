@@ -57,7 +57,7 @@ app.use((req, _res, next) => {
 })
 
 // mount api v1 routes
-app.use('/logs/v1', routes)
+app.use('/', routes)
 
 // if error is not an instanceOf APIError, convert it.
 app.use(error.converter)
