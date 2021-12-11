@@ -28,6 +28,7 @@ const getGroups = (userId) => {
   })
     .populate('admin')
     .populate('processes')
+    .sort({ createdAt: 1 })
   return groups
 }
 

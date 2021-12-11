@@ -1,12 +1,10 @@
 const Process = require('../models/process.model')
 const Group = require('../models/group.model')
-const AddProcess = async (name, groupId, description) => {
-  const newProcess = new Process()
-  newProcess.name = name
-  newProcess.description = description
+const AddProcess = async ( groupId, data) => {
+  const newProcess = new Process(data)
   const createdProcess = await newProcess.save()
-  const updatedGroup = await Group.findOneAndUpdate(
-    { _id: groupId },
+  const updatedGroup = await Group.findByIdAndUpdate(
+    groupId,
     { $addToSet: { processes: createdProcess._id } },
     { new: true }
   )

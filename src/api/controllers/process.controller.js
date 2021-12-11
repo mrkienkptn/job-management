@@ -4,9 +4,8 @@ const getApiResponse = require('../utils/response')
 
 const AddProcess = async (req, res) => {
   try {
-    const { name, description } = req.body
     const { groupId } = req.params
-    const createdProcess = await processRepo.AddProcess(name, groupId, description)
+    const createdProcess = await processRepo.AddProcess( groupId, req.body)
     return res.status(httpStatus.OK).json(getApiResponse({ data: createdProcess }))
   } catch (error) {
     return res.status(httpStatus.BAD_REQUEST).json(getApiResponse({ data: error }))
