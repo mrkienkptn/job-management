@@ -7,7 +7,7 @@ const { verifyToken, authorization } = require('../../middlewares')
 const router = Router()
 
 router
-  .route('/')
+  .route('/:groupId/:processId')
   .post(verifyToken, validation.addTaskValidate, authorization.memberAuth, controller.addTask)
   .get(verifyToken, validation.getTaskValidate, authorization.memberAuth, controller.getTask)
 
