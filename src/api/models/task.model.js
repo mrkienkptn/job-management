@@ -36,6 +36,7 @@ const TaskSchema = new mongoose.Schema(
   }
 )
 
+TaskSchema.indexes()
 /**
  * typedef kanbanCard
  */

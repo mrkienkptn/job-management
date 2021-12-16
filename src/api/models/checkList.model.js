@@ -13,6 +13,8 @@ const CheckListSchema = new mongoose.Schema({
   ]
 })
 
+CheckListSchema.indexes()
+
 const CheckList = mongoose.model('check-list', CheckListSchema)
 
 module.exports = CheckList

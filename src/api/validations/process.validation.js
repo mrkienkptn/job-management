@@ -1,6 +1,16 @@
 const { Joi } = require('express-validation')
 const { customValidate } = require('../utils/validation')
 const VALID_ID = /^[a-f 0-9]{24}$/i
+
+const getProcess = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
+
 const addProcess = {
   params: Joi.object({
     groupId: Joi
@@ -47,5 +57,6 @@ const editProcess = {
 module.exports = {
   addProcessValidate: customValidate(addProcess),
   removeProcessValidate: customValidate(removeProcess),
-  editProcessValidate: customValidate(editProcess)
+  editProcessValidate: customValidate(editProcess),
+  getProcessValidate: customValidate(getProcess)
 }

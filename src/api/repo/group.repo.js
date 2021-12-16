@@ -1,4 +1,4 @@
-const Group = require('../models/group.model')
+const { Group } = require('../models')
 
 const createGroup = (adminId, name, description) => {
   const group = new Group()
@@ -53,11 +53,25 @@ const closeGroup = async (groupId) => {
   const deleteGroup = await Group.deleteOne({ _id: groupId })
   return deleteGroup
 }
+
+const getGroup = async (groupId) => {
+  const group = await Group.findById(groupId)
+    .populate({
+      path: 'processes',
+      select: 'name description isFinish',
+      populate: {
+        path: 'tasks',
+        select: '_id title description'
+      }
+    })
+    return group
+}
 module.exports = {
   createGroup,
   getGroupById,
   getGroups,
   addMember,
   removeMember,
-  closeGroup
+  closeGroup,
+  getGroup
 }

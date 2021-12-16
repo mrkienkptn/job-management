@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const ProcessSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   tasks: [
     {
@@ -19,8 +20,6 @@ const ProcessSchema = new mongoose.Schema({
     default: false
   }
 })
-
-ProcessSchema.indexes()
 
 const Process = mongoose.model('process', ProcessSchema)
 

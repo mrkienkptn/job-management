@@ -1,4 +1,4 @@
-const User = require('../models/user.model')
+const { User }= require('../models')
 
 const getUser = email => {
   const user = User.findOne({ email: email })

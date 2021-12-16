@@ -4,6 +4,10 @@ const { customValidate } = require('../utils/validation')
 const VALID_ID = /^[a-f 0-9]{24}$/i
 const addTask = {
   params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
     processId: Joi
       .string()
       .required()
@@ -124,10 +128,24 @@ const deleteTask = {
       .required()
       .regex(VALID_ID)
   })
-
 }
+
+const getTask = {
+  params: Joi.object({
+    taskId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
+
 module.exports = {
   addTaskValidate: customValidate(addTask),
   editTaskValidate: customValidate(editTask),
-  deleteTaskValidate: customValidate(deleteTask)
+  deleteTaskValidate: customValidate(deleteTask),
+  getTaskValidate: customValidate(getTask)
 }

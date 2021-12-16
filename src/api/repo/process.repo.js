@@ -1,5 +1,5 @@
-const Process = require('../models/process.model')
-const Group = require('../models/group.model')
+const { Process, Group } = require('../models')
+
 const AddProcess = async ( groupId, data) => {
   const newProcess = new Process(data)
   const createdProcess = await newProcess.save()
@@ -8,6 +8,14 @@ const AddProcess = async ( groupId, data) => {
     { $addToSet: { processes: createdProcess._id } },
     { new: true }
   )
+  .populate({
+    path: 'processes',
+    select: 'name description isFinish',
+    populate: {
+      path: 'tasks',
+      select: '_id title description'
+    }
+  })
   return updatedGroup
 }
 const RemoveProcess = async (groupId, processId) => {
@@ -22,12 +30,20 @@ const RemoveProcess = async (groupId, processId) => {
   return updatedProcess
 }
 
-const AddTaskToProcess = async (processId, taskData) => {
-
+const AddTaskToProcess = async (processId, taskId) => {
+  const updatedProcess = await Process.findByIdAndUpdate(
+    processId,
+    { $addToSet: { tasks: taskId } }
+  )
+  return updatedProcess
 }
 
 const RemoveTaskFromProcess = async (processId, taskId) => {
-
+  const updatedProcess = await Process.findByIdAndUpdate(
+    processId,
+    { $pull: { tasks: taskId } }
+  )
+  return updatedProcess
 }
 
 module.exports = {

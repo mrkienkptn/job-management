@@ -1,6 +1,6 @@
 const { Joi } = require('express-validation')
 const { customValidate } = require('../utils/validation')
-
+const VALID_ID = /^[a-f 0-9]{24}$/i
 const createGroup = {
   body: Joi.object({
     name: Joi
@@ -31,8 +31,18 @@ const addMember = {
       .required()
   })
 }
+
+const getGroup = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
 module.exports = {
   createGroupValidate: customValidate(createGroup),
   getGroupsValidate: customValidate(getGroups),
-  addMemberValidate: customValidate(addMember)
+  addMemberValidate: customValidate(addMember),
+  getGroupValidate: customValidate(getGroup)
 }

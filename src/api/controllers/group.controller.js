@@ -45,8 +45,18 @@ const AddMember = async (req, res, next) => {
   }
 }
 
+const getGroup = async (req, res, next) => {
+  const { groupId } = req.params
+  try {
+    const group = await groupRepo.getGroup(groupId)
+    return res.status(httpStatus.OK).json(getApiResponse({ data: group }))
+  } catch (error) {
+    next(error)
+  }
+}
 module.exports = {
   CreateGroup,
   GetGroups,
-  AddMember
+  AddMember,
+  getGroup
 }

@@ -2,7 +2,6 @@ const { Router } = require('express')
 
 const { userController: controller } = require('../../controllers')
 const { userValidation: validation } = require('../../validations')
-// const { verifyToken } = require('../../middlewares')
 
 const router = Router()
 

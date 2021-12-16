@@ -20,10 +20,10 @@ const MessageSchema = new mongoose.Schema(
     timestamps: true
   }
 )
-MessageSchema.indexs()
+MessageSchema.indexes()
 /**
  * typedef log
  */
-const Message = mongoose.model('tag', MessageSchema)
+const Message = mongoose.model('message', MessageSchema)
 
 module.exports = Message
