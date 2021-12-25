@@ -12,4 +12,8 @@ router
 router
   .route('/:groupId/:processId')
   .delete(verifyToken, authorization.adminAuth, validation.removeProcessValidate, controller.RemoveProcess)
+router
+  .route('/tasks-dragging/:groupId')
+  .put(verifyToken, authorization.memberAuth, validation.dragTaskValidate, controller.DragTask)
+  
 module.exports = router

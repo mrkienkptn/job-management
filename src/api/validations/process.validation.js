@@ -54,9 +54,42 @@ const editProcess = {
       )
   })
 }
+
+const dragTask = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  }),
+  body: Joi.object({
+    fromColumnId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    toColumnId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    cardId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    fromPosition: Joi
+      .number()
+      .min(0)
+      .required(),
+    toPosition: Joi
+      .number()
+      .min(0)
+      .required()
+  })
+}
+
 module.exports = {
   addProcessValidate: customValidate(addProcess),
   removeProcessValidate: customValidate(removeProcess),
   editProcessValidate: customValidate(editProcess),
-  getProcessValidate: customValidate(getProcess)
+  getProcessValidate: customValidate(getProcess),
+  dragTaskValidate: customValidate(dragTask)
 }

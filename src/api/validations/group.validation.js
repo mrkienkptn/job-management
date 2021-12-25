@@ -40,9 +40,28 @@ const getGroup = {
       .regex(VALID_ID)
   })
 }
+
+const dragProcess = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  }),
+  body: Joi.object({
+    fromPosition: Joi.number().required().min(0),
+    toPosition: Joi.number().required().min(0),
+    processId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
+
 module.exports = {
   createGroupValidate: customValidate(createGroup),
   getGroupsValidate: customValidate(getGroups),
   addMemberValidate: customValidate(addMember),
-  getGroupValidate: customValidate(getGroup)
+  getGroupValidate: customValidate(getGroup),
+  dragProcessValidate: customValidate(dragProcess)
 }

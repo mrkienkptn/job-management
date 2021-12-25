@@ -1,6 +1,6 @@
 const { Process, Group } = require('../models')
-
-const AddProcess = async ( groupId, data) => {
+const groupRepo = require('./group.repo')
+const AddProcess = async (groupId, data) => {
   const newProcess = new Process(data)
   const createdProcess = await newProcess.save()
   const updatedGroup = await Group.findByIdAndUpdate(
@@ -8,14 +8,14 @@ const AddProcess = async ( groupId, data) => {
     { $addToSet: { processes: createdProcess._id } },
     { new: true }
   )
-  .populate({
-    path: 'processes',
-    select: 'name description isFinish',
-    populate: {
-      path: 'tasks',
-      select: '_id title description'
-    }
-  })
+    .populate({
+      path: 'processes',
+      select: 'name description isFinish',
+      populate: {
+        path: 'tasks',
+        select: '_id title description'
+      }
+    })
   return updatedGroup
 }
 const RemoveProcess = async (groupId, processId) => {
@@ -46,9 +46,31 @@ const RemoveTaskFromProcess = async (processId, taskId) => {
   return updatedProcess
 }
 
+const DragTask = async (groupId, data) => {
+  const { cardId, fromColumnId, fromPosition, toColumnId, toPosition } = data
+  const updatedFromProcess = await Process.updateOne(
+    { _id: fromColumnId },
+    { $pull: { tasks: cardId } }
+  )
+  const updatedToProcess = await Process.updateOne(
+    { _id: toColumnId },
+    {
+      $push: {
+        tasks: {
+          $each: [cardId],
+          $position: toPosition
+        }
+      }
+    }
+  )
+  const group = await groupRepo.getGroup(groupId)
+  return group
+}
+
 module.exports = {
   AddProcess,
   RemoveProcess,
   AddTaskToProcess,
-  RemoveTaskFromProcess
+  RemoveTaskFromProcess,
+  DragTask
 }

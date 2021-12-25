@@ -54,9 +54,21 @@ const getGroup = async (req, res, next) => {
     next(error)
   }
 }
+
+const dragProcess = async (req, res, next) => {
+  const { groupId } = req.params
+  try {
+    const group = await groupRepo.dragProcess(groupId, req.body)
+    return res.status(httpStatus.OK).json(getApiResponse({ data: group }))
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   CreateGroup,
   GetGroups,
   AddMember,
-  getGroup
+  getGroup,
+  dragProcess
 }

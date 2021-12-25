@@ -66,6 +66,24 @@ const getGroup = async (groupId) => {
     })
     return group
 }
+
+const dragProcess = async (groupId, data) => {
+  const { processId, fromPosition, toPosition } = data
+  const pull = await Group.updateOne(
+    { _id: groupId },
+    {
+      $pull: { processes: processId }
+    }
+  )
+  const push = await Group.updateOne(
+    { _id: groupId },
+    {
+      $push: { processes: { $each: [processId], $position: toPosition } }
+    }
+  )
+  return await getGroup(groupId)
+}
+
 module.exports = {
   createGroup,
   getGroupById,
@@ -73,5 +91,6 @@ module.exports = {
   addMember,
   removeMember,
   closeGroup,
-  getGroup
+  getGroup,
+  dragProcess
 }
