@@ -12,7 +12,17 @@ const createUser = (email, hash, name) => {
 
   return user.save()
 }
+
+const getUsers = async (email) => {
+  const users = await User.find(
+    { email: { $regex: new RegExp(email, 'i') } },
+    {"_id": 1, "name": 1, "email": 1 }
+  )
+  return users
+}
+
 module.exports = {
   getUser,
-  createUser
+  createUser,
+  getUsers
 }

@@ -1,7 +1,7 @@
 const { Joi } = require('express-validation')
 
 const { customValidate } = require('../utils/validation')
-const VALID_ID = /^[a-f 0-9]{24}$/i
+const VALID_ID = /^[a-f 0-9]{24}$/
 const addTask = {
   params: Joi.object({
     processId: Joi

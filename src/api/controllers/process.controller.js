@@ -15,8 +15,8 @@ const AddProcess = async (req, res, next) => {
 const RemoveProcess = async (req, res, next) => {
   const { groupId, processId } = req.params
   try {
-    const updatedProcess = await processRepo.RemoveProcess(groupId, processId)
-    return res.status(httpStatus.OK).json(getApiResponse({ data: updatedProcess }))
+    const result = await processRepo.RemoveProcess(groupId, processId)
+    return res.status(httpStatus.OK).json(getApiResponse({ data: result }))
   } catch (error) {
     next(error)
   }
@@ -32,8 +32,19 @@ const DragTask = async (req, res, next) => {
   }
 }
 
+const EditProcess = async (req, res, next) => {
+  const { processId, groupId } = req.params
+  try {
+    const data = await processRepo.editProcess(groupId, processId, req.body)
+    return res.status(httpStatus.OK).json(getApiResponse({ data }))
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   AddProcess,
   RemoveProcess,
-  DragTask
+  DragTask,
+  EditProcess
 }

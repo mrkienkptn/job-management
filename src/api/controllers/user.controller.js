@@ -59,7 +59,18 @@ const SignUp = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+  const { email } = req.query
+  try {
+    const users = await userRepo.getUsers(email)
+    return res.status(httpStatus.OK).json(getApiResponse({ data: users }))
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   Login,
-  SignUp
+  SignUp,
+  getUsers
 }

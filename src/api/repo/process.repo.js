@@ -19,15 +19,30 @@ const AddProcess = async (groupId, data) => {
   return updatedGroup
 }
 const RemoveProcess = async (groupId, processId) => {
-  const updatedProcess = await Group.findOneAndUpdate(
-    { _id: groupId },
+  const updateGroup = Group.findByIdAndUpdate(
+    groupId,
     { $pull: { processes: processId } },
     { new: true }
   )
-  await Process.deleteOne(
+  .populate({
+    path: 'processes',
+    select: 'name description isFinish',
+    populate: {
+      path: 'tasks',
+      select: '_id title description'
+    }
+  })
+  const removeProcess = Process.deleteOne(
     { _id: processId }
   )
-  return updatedProcess
+  const [group, removedProcess] = await Promise.all([
+    updateGroup,
+    removeProcess
+  ])
+  return {
+    group,
+    removedProcess
+  }
 }
 
 const AddTaskToProcess = async (processId, taskId) => {
@@ -67,10 +82,28 @@ const DragTask = async (groupId, data) => {
   return group
 }
 
+const editProcess = async (groupId, processId, data) => {
+  const updateProcess = Process.findByIdAndUpdate(
+    processId,
+    data,
+    { new: true }
+  )
+  const getGroup = groupRepo.getGroup(groupId)
+  const [updatedProcess, group] = await Promise.all([
+    updateProcess,
+    getGroup
+  ])
+  return {
+    updatedProcess,
+    group
+  }
+}
+
 module.exports = {
   AddProcess,
   RemoveProcess,
   AddTaskToProcess,
   RemoveTaskFromProcess,
-  DragTask
+  DragTask,
+  editProcess
 }

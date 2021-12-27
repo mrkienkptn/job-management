@@ -6,6 +6,7 @@ const Process = require('./process.model')
 const Tag = require('./tag.model')
 const Task = require('./task.model')
 const CheckList = require('./checkList.model')
+const Notification = require('./notification.model')
 
 module.exports = {
   User,
@@ -15,5 +16,6 @@ module.exports = {
   Process,
   Tag,
   Task,
-  CheckList
+  CheckList,
+  Notification
 }

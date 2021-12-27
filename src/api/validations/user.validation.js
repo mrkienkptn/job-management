@@ -31,7 +31,18 @@ const login = {
       .required()
   })
 }
+
+const getUsers = {
+  query: Joi.object({
+    email: Joi
+      .string()
+      .required()
+      .min(4)
+  })
+}
+
 module.exports = {
   loginValidate: customValidate(login),
-  signupValidate: customValidate(signup)
+  signupValidate: customValidate(signup),
+  getUsersValidate: customValidate(getUsers)
 }
