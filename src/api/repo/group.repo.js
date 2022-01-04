@@ -64,6 +64,10 @@ const getGroup = async (groupId) => {
         select: '_id title description'
       }
     })
+    .populate({
+      path: 'members',
+      select: 'name _id email'
+    })
     return group
 }
 

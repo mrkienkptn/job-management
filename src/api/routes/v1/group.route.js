@@ -18,7 +18,7 @@ router
   .put(verifyToken, validation.addMemberValidate, authorization.adminAuth, controller.AddMember)
 router
   .route('/members/remove/:groupId:/memberId')
-
+  .put(verifyToken, validation.addMemberValidate, authorization.adminAuth, controller.removeMember)
 router
   .route('/processes-dragging/:groupId')
   .put(verifyToken, validation.dragProcessValidate, authorization.memberAuth, controller.dragProcess)
