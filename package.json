@@ -10,7 +10,7 @@
   "author": "HungNV",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon .",
+    "start": "node .",
     "test": "mocha src/**/*.spec.js",
     "lint": "standard",
     "lint-fix": "standard --fix",

@@ -8,8 +8,13 @@ const router = Router()
 
 router
   .route('/:groupId')
-  .post(verifyToken, authorization.Authorization, validation.addProcessValidate, controller.AddProcess)
+  .post(verifyToken, validation.addProcessValidate, authorization.adminAuth, controller.AddProcess)
 router
-  .route('/:groupId/:processId')
-  .delete(verifyToken, authorization.Authorization, validation.removeProcessValidate, controller.RemoveProcess)
+  .route('/actions/:groupId/:processId')
+  .put(verifyToken, validation.editProcessValidate, authorization.adminAuth, controller.EditProcess)
+  .delete(verifyToken, validation.removeProcessValidate, authorization.adminAuth, controller.RemoveProcess)
+router
+  .route('/tasks-dragging/:groupId')
+  .put(verifyToken, validation.dragTaskValidate, authorization.memberAuth, controller.DragTask)
+  
 module.exports = router

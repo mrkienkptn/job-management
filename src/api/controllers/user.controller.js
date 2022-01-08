@@ -15,8 +15,7 @@ const Login = async (req, res, next) => {
       const matchPassword = passwordUtils.comparePassword(password, user.password)
       if (matchPassword) {
         const payload = {
-          id: user.id,
-          password: user.password
+          id: user.id
         }
         const accessToken = genToken(payload, secretKey)
         return res.status(httpStatus.OK).json(getApiResponse({ data: { user, accessToken } }))
@@ -33,16 +32,22 @@ const Login = async (req, res, next) => {
 
 const SignUp = async (req, res, next) => {
   try {
+    const {
+      authConfig: { secretKey }
+    } = req
     const { email, password, name } = req.body
     const user = await userRepo.getUser(email)
-    if (user !== null) {
-      return res.status(httpStatus.NOT_FOUND).json(getApiResponse({ msg: 'Exist' }))
+    if (user) {
+      return res.status(httpStatus.BAD_REQUEST).json(getApiResponse({ msg: 'Exist' }))
     } else {
       const hash = passwordUtils.genPassword(password)
       userRepo.createUser(email, hash, name)
         .then((newUser) => {
-          console.log(newUser)
-          return res.status(httpStatus.OK).json(getApiResponse({ data: newUser }))
+          const payload = {
+            id: newUser.id
+          }
+          const accessToken = genToken(payload, secretKey)
+          return res.status(httpStatus.OK).json(getApiResponse({ data: { user: newUser, accessToken } }))
         })
         .catch((error) => {
           console.log(error)
@@ -54,7 +59,18 @@ const SignUp = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+  const { email } = req.query
+  try {
+    const users = await userRepo.getUsers(email)
+    return res.status(httpStatus.OK).json(getApiResponse({ data: users }))
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   Login,
-  SignUp
+  SignUp,
+  getUsers
 }

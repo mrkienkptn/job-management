@@ -1,4 +1,4 @@
-const Group = require('../models/group.model')
+const { Group } = require('../models')
 
 const createGroup = (adminId, name, description) => {
   const group = new Group()
@@ -28,6 +28,7 @@ const getGroups = (userId) => {
   })
     .populate('admin')
     .populate('processes')
+    .sort({ createdAt: 1 })
   return groups
 }
 
@@ -52,11 +53,48 @@ const closeGroup = async (groupId) => {
   const deleteGroup = await Group.deleteOne({ _id: groupId })
   return deleteGroup
 }
+
+const getGroup = async (groupId) => {
+  const group = await Group.findById(groupId)
+    .populate({
+      path: 'processes',
+      select: 'name description isFinish',
+      populate: {
+        path: 'tasks',
+        select: '_id title description'
+      }
+    })
+    .populate({
+      path: 'members',
+      select: 'name _id email'
+    })
+    return group
+}
+
+const dragProcess = async (groupId, data) => {
+  const { processId, fromPosition, toPosition } = data
+  const pull = await Group.updateOne(
+    { _id: groupId },
+    {
+      $pull: { processes: processId }
+    }
+  )
+  const push = await Group.updateOne(
+    { _id: groupId },
+    {
+      $push: { processes: { $each: [processId], $position: toPosition } }
+    }
+  )
+  return await getGroup(groupId)
+}
+
 module.exports = {
   createGroup,
   getGroupById,
   getGroups,
   addMember,
   removeMember,
-  closeGroup
+  closeGroup,
+  getGroup,
+  dragProcess
 }

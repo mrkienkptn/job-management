@@ -2,7 +2,6 @@ const { Router } = require('express')
 
 const { userController: controller } = require('../../controllers')
 const { userValidation: validation } = require('../../validations')
-// const { verifyToken } = require('../../middlewares')
 
 const router = Router()
 
@@ -13,4 +12,8 @@ router
 router
   .route('/signup')
   .post(validation.signupValidate, controller.SignUp)
+
+router.route('/users')
+  .get(validation.getUsersValidate, controller.getUsers)
+
 module.exports = router

@@ -1,6 +1,16 @@
 const { Joi } = require('express-validation')
 const { customValidate } = require('../utils/validation')
-const VALID_ID = /^[a-f 0-9]{24}$/i
+const VALID_ID = /^[a-f 0-9]{24}$/
+
+const getProcess = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
+
 const addProcess = {
   params: Joi.object({
     groupId: Joi
@@ -9,9 +19,7 @@ const addProcess = {
   body: Joi.object({
     name: Joi
       .string()
-      .required(),
-    description: Joi
-      .string()
+      .required()
   })
 }
 
@@ -33,6 +41,11 @@ const editProcess = {
     processId: Joi
       .string()
       .required()
+      .regex(VALID_ID),
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
   }),
   body: Joi.object({
     name: Joi.string(),
@@ -43,11 +56,47 @@ const editProcess = {
         Joi
           .string()
           .regex(VALID_ID)
-      )
+      ),
+    isFinish: Joi
+      .boolean()
   })
 }
+
+const dragTask = {
+  params: Joi.object({
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  }),
+  body: Joi.object({
+    fromColumnId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    toColumnId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    cardId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    fromPosition: Joi
+      .number()
+      .min(0)
+      .required(),
+    toPosition: Joi
+      .number()
+      .min(0)
+      .required()
+  })
+}
+
 module.exports = {
   addProcessValidate: customValidate(addProcess),
   removeProcessValidate: customValidate(removeProcess),
-  editProcessValidate: customValidate(editProcess)
+  editProcessValidate: customValidate(editProcess),
+  getProcessValidate: customValidate(getProcess),
+  dragTaskValidate: customValidate(dragTask)
 }
