@@ -24,7 +24,7 @@ const Login = async (req, res, next) => {
         return res.status(httpStatus.NOT_FOUND).json(getApiResponse({ msg: 'Password is not match' }))
       }
     } else {
-      return res.status(httpStatus.NOT_FOUND).json(getApiResponse({ data: { user: 'none' } }))
+      return res.status(httpStatus.NOT_FOUND).json(getApiResponse({ data: { user: 'Email is not exist' } }))
     }
   } catch (error) {
     next(error)
