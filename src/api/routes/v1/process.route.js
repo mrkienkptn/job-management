@@ -16,5 +16,4 @@ router
 router
   .route('/tasks-dragging/:groupId')
   .put(verifyToken, validation.dragTaskValidate, authorization.memberAuth, controller.DragTask)
-  
 module.exports = router

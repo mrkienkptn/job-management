@@ -13,7 +13,8 @@ const NotificationSchema = new mongoose.Schema({
   o: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
-    require: true
+    require: true,
+    indexed: true
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,

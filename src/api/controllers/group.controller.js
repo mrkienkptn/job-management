@@ -34,16 +34,17 @@ const AddMember = async (req, res, next) => {
   const { memberId } = req.body
   const { groupId } = req.params
   const { id } = req.payload
-  try {    
+  try {
     const updatedGroup = await groupRepo.addMember(groupId, memberId)
     const notData = {
       s: id,
       v: NOT_ACTION.ADD_MEM,
       o: memberId,
-      target: groupId
+      group: groupId
     }
+    console.log(notData)
     await notificationRepo.createAddMemberNot(notData)
-    return res.status(httpStatus.OK).json(getApiResponse({ data: updatedGroup }))    
+    return res.status(httpStatus.OK).json(getApiResponse({ data: updatedGroup }))
   } catch (error) {
     next(error)
   }
@@ -52,9 +53,9 @@ const AddMember = async (req, res, next) => {
 const removeMember = async (req, res, next) => {
   const { memberId } = req.body
   const { groupId } = req.params
-  try {    
+  try {
     const updatedGroup = await groupRepo.removeMember(groupId, memberId)
-    return res.status(httpStatus.OK).json(getApiResponse({ data: updatedGroup }))    
+    return res.status(httpStatus.OK).json(getApiResponse({ data: updatedGroup }))
   } catch (error) {
     next(error)
   }

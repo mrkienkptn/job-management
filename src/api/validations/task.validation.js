@@ -67,7 +67,8 @@ const editTask = {
       .string()
       .required(),
     description: Joi
-      .string(),
+      .string()
+      .empty(),
     asignees: Joi
       .array()
       .items(Joi
@@ -134,9 +135,29 @@ const getTask = {
   })
 }
 
+const editTaskUser = {
+  params: Joi.object({
+    taskId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID),
+    groupId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  }),
+  body: Joi.object({
+    userId: Joi
+      .string()
+      .required()
+      .regex(VALID_ID)
+  })
+}
+
 module.exports = {
   addTaskValidate: customValidate(addTask),
   editTaskValidate: customValidate(editTask),
   deleteTaskValidate: customValidate(deleteTask),
-  getTaskValidate: customValidate(getTask)
+  getTaskValidate: customValidate(getTask),
+  editTaskUserValidate: customValidate(editTaskUser)
 }

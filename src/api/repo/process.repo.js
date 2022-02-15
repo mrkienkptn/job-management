@@ -1,4 +1,4 @@
-const { Process, Group } = require('../models')
+const { Process, Group, Task } = require('../models')
 const groupRepo = require('./group.repo')
 const AddProcess = async (groupId, data) => {
   const newProcess = new Process(data)
@@ -16,7 +16,14 @@ const AddProcess = async (groupId, data) => {
         select: '_id title description'
       }
     })
-  return updatedGroup
+    .populate({
+      path: 'members',
+      select: 'name _id email'
+    })
+  return {
+    createdProcess,
+    updatedGroup
+  }
 }
 const RemoveProcess = async (groupId, processId) => {
   const updateGroup = Group.findByIdAndUpdate(
@@ -24,21 +31,30 @@ const RemoveProcess = async (groupId, processId) => {
     { $pull: { processes: processId } },
     { new: true }
   )
-  .populate({
-    path: 'processes',
-    select: 'name description isFinish',
-    populate: {
-      path: 'tasks',
-      select: '_id title description'
-    }
-  })
-  const removeProcess = Process.deleteOne(
-    { _id: processId }
-  )
+    .populate({
+      path: 'processes',
+      select: 'name description isFinish',
+      populate: {
+        path: 'tasks',
+        select: '_id title description'
+      }
+    })
+    .populate({
+      path: 'members',
+      select: 'name _id email'
+    })
+  const removeProcess = Process.findByIdAndRemove(processId)
   const [group, removedProcess] = await Promise.all([
     updateGroup,
     removeProcess
   ])
+  const { tasks } = removedProcess
+  const deleteTasks = []
+  for (let i = 0; i < tasks.length; i++) {
+    const del = Task.deleteOne({ _id: tasks[i]._id })
+    deleteTasks.push(del)
+  }
+  await Promise.all(deleteTasks)
   return {
     group,
     removedProcess
@@ -62,12 +78,12 @@ const RemoveTaskFromProcess = async (processId, taskId) => {
 }
 
 const DragTask = async (groupId, data) => {
-  const { cardId, fromColumnId, fromPosition, toColumnId, toPosition } = data
-  const updatedFromProcess = await Process.updateOne(
+  const { cardId, fromColumnId, toColumnId, toPosition } = data
+  await Process.updateOne(
     { _id: fromColumnId },
     { $pull: { tasks: cardId } }
   )
-  const updatedToProcess = await Process.updateOne(
+  await Process.updateOne(
     { _id: toColumnId },
     {
       $push: {

@@ -13,7 +13,7 @@ const TaskSchema = new mongoose.Schema(
     description: {
       type: String
     },
-    asignees: [{
+    assignees: [{
       type: mongoose.Types.ObjectId,
       ref: 'user'
     }],

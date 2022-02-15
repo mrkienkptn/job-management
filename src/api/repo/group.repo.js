@@ -1,11 +1,12 @@
 const { Group } = require('../models')
-
-const createGroup = (adminId, name, description) => {
+const { createConversation } = require('./conversation.repo')
+const createGroup = async (adminId, name, description) => {
   const group = new Group()
   group.admin = adminId
   group.name = name
   group.description = description
-
+  const converst = await createConversation(name)
+  group.conversation = converst._id
   return group.save()
 }
 
@@ -32,21 +33,23 @@ const getGroups = (userId) => {
   return groups
 }
 
-const addMember = (groupId, memberId) => {
-  const update = Group.updateOne(
+const addMember = async (groupId, memberId) => {
+  await Group.updateOne(
     { _id: groupId },
     { $addToSet: { members: memberId } },
     { new: true }
   )
-  return update
+  const group = await getGroup(groupId)
+  return group
 }
 const removeMember = async (groupId, memberId) => {
-  const update = await Group.updateOne(
+  await Group.updateOne(
     { _id: groupId },
     { $pull: { members: memberId } },
     { new: true }
   )
-  return update
+  const group = await getGroup(groupId)
+  return group
 }
 
 const closeGroup = async (groupId) => {
@@ -61,25 +64,35 @@ const getGroup = async (groupId) => {
       select: 'name description isFinish',
       populate: {
         path: 'tasks',
-        select: '_id title description'
+        select: '_id title description dueDate',
+        populate: [
+          {
+            path: 'assignees',
+            select: '_id name email'
+          },
+          {
+            path: 'followers',
+            select: '_id name email'
+          }
+        ]
       }
     })
     .populate({
       path: 'members',
       select: 'name _id email'
     })
-    return group
+  return group
 }
 
 const dragProcess = async (groupId, data) => {
-  const { processId, fromPosition, toPosition } = data
-  const pull = await Group.updateOne(
+  const { processId, toPosition } = data
+  await Group.updateOne(
     { _id: groupId },
     {
       $pull: { processes: processId }
     }
   )
-  const push = await Group.updateOne(
+  await Group.updateOne(
     { _id: groupId },
     {
       $push: { processes: { $each: [processId], $position: toPosition } }

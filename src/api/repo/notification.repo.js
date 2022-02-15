@@ -1,16 +1,17 @@
 const { Notification } = require('../models')
+const { ObjectId } = require('mongoose').Types
 
 const createAddMemberNot = async (data) => {
-  const newNot = new Notification()
+  const newNot = new Notification(data)
   await newNot.save()
 }
 
 const getONotifications = async (userId, queryData) => {
-  const filter = { o: userId }
+  const filter = { o: ObjectId(userId) }
   const { page, records } = queryData
   const rs = await Notification.aggregate([
     {
-      $match : filter
+      $match: filter
     },
     {
       $lookup: {
@@ -34,6 +35,23 @@ const getONotifications = async (userId, queryData) => {
         localField: 'group',
         foreignField: '_id',
         as: 'group'
+      }
+    },
+    {
+      $unwind: '$group'
+    },
+    {
+      $unwind: '$subject'
+    },
+    {
+      $unwind: '$object'
+    },
+    {
+      $project: {
+        s: 0,
+        o: 0,
+        'group.listTasks': 0,
+        'group.processes': 0
       }
     },
     {
